@@ -10,6 +10,7 @@
 
 # https://github.com/uvsq21918039/Projet-Avion
 ######
+<<<<<<< HEAD
 #########################################################
 # import des librairies
 import tkinter as tk 
@@ -65,3 +66,13 @@ canvas.grid()
 quadrillage()
 racine.mainloop()
 ########################################################
+=======
+import tkinter as tk
+
+racine = tk.Tk()
+canvas = tk.Canvas(racine, bg='green', height=1400, width=630)
+canvas.grid()
+
+racine.mainloop()
+
+>>>>>>> 8d330a91c69383478cc6086eebc6ba252a6562fc
