@@ -13,6 +13,7 @@
 #########################################################
 # import des librairies
 import tkinter as tk 
+import random as rd
 ########################################################
 
 
@@ -23,21 +24,23 @@ LARGEUR=40
 HAUTEUR=60
 LARGEUR_C=LARGEUR*30+2
 HAUTEUR_C= HAUTEUR*7+2
-COULEUR_QUADR= "black"
+NB_COL=30
+NB_LIGN=7
+COULEUR_QUADR = "black"
 COULEUR_FOND ="white"
-COULEUR_PLACE_LIBRE="green"
-COULEUR_PLACE_OCCUPE="red"
-
+COULEUR_COULOIR ="grey50"
+COULEUR_PASS_DEBOUT_SANS_BAGAGE ="green"
+COULEUR_PASS_DEBOUT_AVEC_BAGAGE = "yellow"
+COULEUR_PASS_ASSIS="red"
+PASSAGER_DEBOUT_SANS_BAGAGE = 1
+PASSAGER_DEBOUT_AVEC_BAGAGE = 2
+PASSAGER_ASSIS = 3
 #########################################################
 
 #########################################################
 #définition des variables globales
-tableau= None
-
-
-
-
-
+tableau=None 
+passager=["Voici la liste des passagers: "]
 
 
 #########################################################
@@ -47,8 +50,8 @@ tableau= None
 #définition des fonctions 
 
 def quadrillage():
-    """Affiche un quadrillage constitué de rectangle de largeur LARGEUR et de longueur HAUTEUR"""
-    canvas.create_rectangle((0,3*HAUTEUR+2),(LARGEUR_C,4*HAUTEUR+2),fill="blue")
+    """Affiche un quadrillage constitué de cellule de taille 40x60 avec un couloir de couleur gris"""
+    cellule = canvas.create_rectangle((0,3*HAUTEUR+2),(LARGEUR_C,4*HAUTEUR+2),fill=COULEUR_COULOIR)
     y = 2
     while y <= 8*HAUTEUR:
         canvas.create_line((0, y), (30*LARGEUR+2, y), fill=COULEUR_QUADR)
@@ -58,15 +61,44 @@ def quadrillage():
         canvas.create_line((x, 0), (x, 7*HAUTEUR+2), fill=COULEUR_QUADR)
         x += LARGEUR
 
-def xy_to_ij(x, y):
-    """Retourne la colonne et la ligne du tableau correspondant
-       aux coordonnées (x,y) du canevas"""
-    return x // HAUTEUR, y // LARGEUR
 
- #########################################################
+def entree_avion():
+    """Génere les passagers à l'entrée de l'avion et determine leur couleur en fonction des bagages"""
+    global tableau
+    for i in range(1, 181):
+        #si l'entrée est libre
+        if tableau[4][0] == 0:
+                x = LARGEUR+2
+                y = 3*HAUTEUR+2
+            #si le passager n'a pas de bagages  
+                if passager[i][3] == 0:
+                    carre = canvas.create_rectangle((2, y), (x, y+HAUTEUR), fill=COULEUR_PASS_DEBOUT_SANS_BAGAGE)
+                    tableau[4][0]= PASSAGER_DEBOUT_SANS_BAGAGE
+            #si le passager a des bagages
+                else :
+                    carre = canvas.create_rectangle((2, y), (x, y+HAUTEUR), fill=COULEUR_PASS_DEBOUT_AVEC_BAGAGE)
+                    tableau[4][0]= PASSAGER_DEBOUT_AVEC_BAGAGE  
+
+
+
+           
+
+def generateur_passager():
+    """Génère une liste contenant les informations de chaque passager (numéro, ligne ,colonne, bagage)"""
+    for i in range (1,181): 
+        passager.append ([i, rd.randint(1,7), rd.randint(1,30), rd.randint(0,2)])
+    for elem in passager :
+        print(elem)    
+  
+#########################################################
 
 #########################################################
 #programme principal
+
+tableau = []
+for i in range(NB_LIGN):
+    tableau.append([0]*NB_COL)   
+print(tableau)
 
 racine = tk.Tk()
 racine.title("Automate Avion")
@@ -78,12 +110,12 @@ canvas = tk.Canvas(racine,width=LARGEUR_C,height=HAUTEUR_C,bg="white")
 lbl_entrée = tk.Label(racine, text="ENTREE")
 
 # positionnement
-canvas.grid(rowspan=7)
-lbl_entrée.grid(column=1,row=3)
+canvas.grid(column=1,rowspan=7)
+lbl_entrée.grid(column=0,row=3)
 # autres fonctions
+generateur_passager() 
 quadrillage()
-
-
+entree_avion()
 # boucle principal
 racine.mainloop()
 ########################################################
