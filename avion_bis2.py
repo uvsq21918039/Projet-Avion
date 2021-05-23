@@ -199,9 +199,7 @@ def etape():
 def start():
     """Démarre l'automate"""
     global id_after
-    generateur_passager()
-    creer_forme_passager()
-    deplace_passager()
+    etape()
     id_after = racine.after(delai, start)
 
 
