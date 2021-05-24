@@ -80,7 +80,32 @@ def entree_avion():
                     tableau[4][0]= PASSAGER_DEBOUT_AVEC_BAGAGE  
 
 
-
+###############################
+#A COMPLETER
+def mouv_passager():
+    for i in range(1,181):
+        for l in range(NB_LIGN):
+            for c in range(NB_COL):
+                #si la colonne du siège du passager n'est pas atteinte  
+                if tableau[4][c] <= passager[i][1] :
+                    #si la cellule de devant est libre
+                    if tableau[4][c+1] == 0 :
+                        canvas.move(carre, LARGEUR)
+                        tableau[4][c] == 0
+                #si la colonne du siège du passager est atteinte
+                else :
+                    #si le passager n'a pas de bagages
+                    if passager[i][3] == 0 :
+                        #si le siège du passager se situe vers la partie inferieure de l'avion
+                        if passager[i][2] < 4 :
+                            if tableau[l-1][c] == 0 :
+                                canvas.move(carre, 0, -HAUTEUR)
+                            else : 
+                        #si le siège du passager se situe vers la partie supérieure de l'avion
+                        else :  
+                            if tableau[l+1][c] == 0 :
+                                canvas.move(carre, 0, HAUTEUR)     
+################################
            
 
 def generateur_passager():
