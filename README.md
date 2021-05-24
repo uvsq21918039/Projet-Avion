@@ -16,8 +16,8 @@ Chaque passager à une destination soit un siège attribué par des coordonnées
 - Le programme est automatique et il s'arrête au moment où tous les passagers seront assis à leurs sièges respectifs.
 - Les passagers en vert désigne les passagers qui n'ont pas de bagages.
 - Les passagers en orange désigne ceux qui ont des bagages.
-- Les passagers en rouge ceux qui ont finis de rangé leurs bagages  et qui sont assis à leurs places correspondantes.
-- Quand tous les passagers sont afficher en oranger alors le programme est terminé.
+- Les passagers en rouge ceux qui ont finis de rangé leurs bagages et qui sont assis à leurs places correspondantes.
+- Quand tous les passagers sont affiché en rouge alors le programme est terminé.
 
 
 
