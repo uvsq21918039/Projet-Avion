@@ -14,8 +14,9 @@ Chaque passager à une destination soit un siège attribué par des coordonnées
 - Un bouton " Démarrer " est disposé à droite pour pouvoir ainsi démarrer le programme.
 - A l'issu du déclenchement du bouton démarrer le programme s'éxécute et fait apparaitre les passagers automatiquement.
 - Le programme est automatique et il s'arrête au moment où tous les passagers seront assis à leurs sièges respectifs.
-- Les passagers en vert désigne les passagers qui n'ont pas compléter leurs tâches (déposer leurs bagages et/ou rejoindre leurs sièges)
-- Les passagers en orange ceux qui ont finis leurs tâches.
+- Les passagers en vert désigne les passagers qui n'ont pas compléter leurs tâches (déposer leurs bagages et/ou rejoindre leurs sièges).
+- Les passagers en orange désigne ceux qui ont rangés leurs bagages mais qui ne sont pas encore à leurs places.
+- Les passagers en rouge ceux qui ont finis de rangé leurs bagages et qui sont assis à leurs places correspondantes.
 - Quand tous les passagers sont afficher en oranger alors le programme est terminé.
 
 # Les Problèmes rencontrés
