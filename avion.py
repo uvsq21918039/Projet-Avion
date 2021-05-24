@@ -1,4 +1,3 @@
-#avion.py
 #########
 # Groupe MPCI 3
 # Antoine Rios Campo
@@ -10,139 +9,147 @@
 
 # https://github.com/uvsq21918039/Projet-Avion
 ######
-#########################################################
-# import des librairies
-import tkinter as tk 
+
+
+
+import tkinter as tk
 import random as rd
-########################################################
 
 
 #########################################################
 #définition des constantes
-
-LARGEUR=40
-HAUTEUR=60
-LARGEUR_C=LARGEUR*30+2
-HAUTEUR_C= HAUTEUR*7+2
-NB_COL=30
-NB_LIGN=7
-COULEUR_QUADR = "black"
-COULEUR_FOND ="white"
-COULEUR_COULOIR ="grey50"
-COULEUR_PASS_DEBOUT_SANS_BAGAGE ="green"
-COULEUR_PASS_DEBOUT_AVEC_BAGAGE = "yellow"
-COULEUR_PASS_ASSIS="red"
-PASSAGER_DEBOUT_SANS_BAGAGE = 1
-PASSAGER_DEBOUT_AVEC_BAGAGE = 2
-PASSAGER_ASSIS = 3
+COTE = 40
+HAUTEUR = 7*COTE  #7 lignes
+LARGEUR = 30*COTE  #30 colonnes
 #########################################################
+
 
 #########################################################
 #définition des variables globales
-tableau=None 
-passager=["Voici la liste des passagers: "]
-
-
+passager = []           #Liste contenant les informations du passagers(colonne actuelle, ligne actuelle, colonne de destination , ligne de destination, nombre de bagages)
+couloir = []            #Liste qui decrit les cellules du couloir [colonne, ligne]
+siege_libre = []        #Liste qui contient les places libres [colonne, ligne]
 #########################################################
 
 
 #########################################################
-#définition des fonctions 
-
+#définiton des fonctions
 def quadrillage():
-    """Affiche un quadrillage constitué de cellule de taille 40x60 avec un couloir de couleur gris"""
-    cellule = canvas.create_rectangle((0,3*HAUTEUR+2),(LARGEUR_C,4*HAUTEUR+2),fill=COULEUR_COULOIR)
-    y = 2
-    while y <= 8*HAUTEUR:
-        canvas.create_line((0, y), (30*LARGEUR+2, y), fill=COULEUR_QUADR)
-        y += HAUTEUR
-    x = 2 
-    while x <= 31*LARGEUR:
-        canvas.create_line((x, 0), (x, 7*HAUTEUR+2), fill=COULEUR_QUADR)
-        x += LARGEUR
+    """Création des cellules de l'avionet des listes siege_libre """
+    global siege_libre, couloir
+    for i in range(1, LARGEUR, COTE):
+        for j in range(1, HAUTEUR, COTE):
+            if j == HAUTEUR/2 - COTE/2 + 1:
+                couloir.append([i // COTE, j // COTE])
+                canvas.create_rectangle(i, j, i+COTE, j+COTE, fill="grey")
+            else:
+                canvas.create_rectangle(i, j, i+COTE, j+COTE, fill="white")
+                siege_libre.append([i // COTE, j // COTE])
 
 
-def entree_avion():
-    """Génere les passagers à l'entrée de l'avion et determine leur couleur en fonction des bagages"""
-    global tableau
-    for i in range(1, 181):
-        #si l'entrée est libre
-        if tableau[4][0] == 0:
-                x = LARGEUR+2
-                y = 3*HAUTEUR+2
-            #si le passager n'a pas de bagages  
-                if passager[i][3] == 0:
-                    carre = canvas.create_rectangle((2, y), (x, y+HAUTEUR), fill=COULEUR_PASS_DEBOUT_SANS_BAGAGE)
-                    tableau[4][0]= PASSAGER_DEBOUT_SANS_BAGAGE
-            #si le passager a des bagages
-                else :
-                    carre = canvas.create_rectangle((2, y), (x, y+HAUTEUR), fill=COULEUR_PASS_DEBOUT_AVEC_BAGAGE)
-                    tableau[4][0]= PASSAGER_DEBOUT_AVEC_BAGAGE  
+def couleur_siege():
+    """Fonction qui définie la couleur des cellules en fonction de la place et du nombre de bagages"""
+    for c in passager:
+        if c[4] > 0:
+        #si le passager a des bagages    
+            canvas.create_rectangle(c[0] * COTE + 1, c[1] * COTE + 1 , c[0] * COTE + 1 +COTE, c[1] * COTE + 1 +COTE, fill="yellow")               
+        elif c[0] == c[2] and c[1] == c[3]:
+        #si le passager est assis a son siège
+            canvas.create_rectangle(c[0] * COTE + 1, c[1] * COTE + 1 , c[0] * COTE + 1 +COTE, c[1] * COTE + 1 +COTE, fill="red")
+        elif c[4] == 0:
+        #si le passager n'a pas de bagages     
+            canvas.create_rectangle(c[0] * COTE + 1, c[1] * COTE + 1 , c[0] * COTE + 1 +COTE, c[1] * COTE + 1 +COTE, fill="green")                
 
 
-###############################
-#A COMPLETER
-def mouv_passager():
-    for i in range(1,181):
-        for l in range(NB_LIGN):
-            for c in range(NB_COL):
-                #si la colonne du siège du passager n'est pas atteinte  
-                if tableau[4][c] <= passager[i][1] :
-                    #si la cellule de devant est libre
-                    if tableau[4][c+1] == 0 :
-                        canvas.move(carre, LARGEUR)
-                        tableau[4][c] == 0
-                #si la colonne du siège du passager est atteinte
-                else :
-                    #si le passager n'a pas de bagages
-                    if passager[i][3] == 0 :
-                        #si le siège du passager se situe vers la partie inferieure de l'avion
-                        if passager[i][2] < 4 :
-                            if tableau[l-1][c] == 0 :
-                                canvas.move(carre, 0, -HAUTEUR)
-                            else : 
-                        #si le siège du passager se situe vers la partie supérieure de l'avion
-                        else :  
-                            if tableau[l+1][c] == 0 :
-                                canvas.move(carre, 0, HAUTEUR)     
-################################
-           
+def genere_passager():
+    """Fonction qui génère les passagers à l'entrée de l'avion"""
+    global passager, siege_libre
+    if siege_libre:
+        for c in passager:
+            if c[0] != 0 and c[1] == 3:   
+            #si l'entrée est libre        
+                siege_attribue = rd.choice(siege_libre)
+                siege_libre.remove(siege_attribue)
+                passager.append([0, 3, siege_attribue[0], siege_attribue[1], rd.randint(0, 2)])
+            
 
-def generateur_passager():
-    """Génère une liste contenant les informations de chaque passager (numéro, ligne ,colonne, bagage)"""
-    for i in range (1,181): 
-        passager.append ([i, rd.randint(1,7), rd.randint(1,30), rd.randint(0,2)])
-    for elem in passager :
-        print(elem)    
-  
+def nouvelle_etape():
+    """Fonction qui effectue une étape de l'automate pour chaque cellule"""
+    global passager, siege_libre
+    if passager:
+        move()
+        genere_passager() 
+    else:
+        siege_attribue = rd.choice(siege_libre)
+        siege_libre.remove(siege_attribue)
+        passager.append([0, 3, siege_attribue[0], siege_attribue[1], rd.randint(0, 2)])
+
+
+def move():
+    """Fonction qui permet de bouger les passagers dans l'avion en fonction des voisins"""
+    global passager
+    for el in passager:
+        if el[0] == el[2]:
+        #si la colonne du siège est atteinte    
+            if el[4] > 0:
+            #si le passager a des bagages    
+                el[4] -= 1
+            else:
+            #si le passager n'a plus de bagage    
+                if el[1] > el[3]:
+                #si le siège du passager se situe sur la partie supérieure de l'avion    
+                    el[1] -= 1
+                    for k in passager:
+                        if el[0:2] == k[0:2] and k[1] != k[3] and k != el:
+                            el[1] -= 1
+                            break
+                        elif el[0:2] == k[0:2] and k[1] == k[3] and k != el:
+                            k[1] -= 1
+                            break
+                elif el[1] < el[3]:
+                #si le siège du passager se situe sur la partie inférieure de l'avion    
+                    el[1] += 1
+                    for k in passager:
+                        if el[0:2] == k[0:2] and k[1] != k[3] and k != el:
+                            el[1] += 1
+                            break
+                        elif el[0:2] == k[0:2] and k[1] == k[3] and k != el:
+                            k[1] += 1
+                            break
+        elif el[0] != el[2]:
+        #si la colonne du siège n'est pas atteinte    
+            mouvement = True
+            for k in passager:
+                if k[1] == 3 and el[0] + 1 == k[0]:
+                    mouvement = False
+                    break
+            if mouvement == True:
+                el[0] += 1 
+   
+
+def demarrer():
+    """Fonction qui permet de lancer le programme"""
+    quadrillage()
+    couleur_siege()
+    nouvelle_etape()
+    canvas.after(100, demarrer)
+#########################################################          
+
+
 #########################################################
-
-#########################################################
-#programme principal
-
-tableau = []
-for i in range(NB_LIGN):
-    tableau.append([0]*NB_COL)   
-print(tableau)
-
+#programme pricipal
 racine = tk.Tk()
-racine.title("Automate Avion")
-
-
-
-# création des widgets
-canvas = tk.Canvas(racine,width=LARGEUR_C,height=HAUTEUR_C,bg="white")
+racine.title("Automate simulant le déplacement des passagers dans un avion")
+#création des widgets
+canvas = tk.Canvas(racine, width=LARGEUR, height=HAUTEUR, bg="black")
+Bouton_demarrer = tk.Button(racine, text = "DEMARRER", command = demarrer)
 lbl_entrée = tk.Label(racine, text="ENTREE")
 
-# positionnement
-canvas.grid(column=1,rowspan=7)
-lbl_entrée.grid(column=0,row=3)
-# autres fonctions
-generateur_passager() 
-quadrillage()
-entree_avion()
-# boucle principal
-racine.mainloop()
-########################################################
+#positionnement des widgets
+canvas.grid(row = 2, column=1,columnspan = 3)
+Bouton_demarrer.grid(row = 2, column = 4)
+lbl_entrée.grid(column=0,row=2)
 
+
+racine.mainloop()
 
