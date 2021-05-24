@@ -19,7 +19,5 @@ Chaque passager à une destination soit un siège attribué par des coordonnées
 - Les passagers en vert ceux qui ont finis de rangé leurs bagages et qui sont assis à leurs places correspondantes.
 - Quand tous les passagers sont afficher en oranger alors le programme est terminé.
 
-# Les Problèmes rencontrés
 
-- A l'éxécution de notre programme, les passages ne se déplacent pas comme prévu et reste fixe bien que les fonctions marchent individuellement.
 
