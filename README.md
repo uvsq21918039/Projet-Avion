@@ -19,5 +19,9 @@ Chaque passager à une destination soit un siège attribué par des coordonnées
 - Les passagers en rouge ceux qui ont finis de rangé leurs bagages et qui sont assis à leurs places correspondantes.
 - Quand tous les passagers sont affiché en rouge alors le programme est terminé.
 
+# Bug non résolu
+
+- Certaines cases ne respectent pas la loi du code. 
+- Le temps d'éxécution du programme est trop long.
 
 
